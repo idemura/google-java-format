@@ -244,7 +244,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     }
   }
 
-  /** Whether or not to include dimensions. */
+  /** Whether to include dimensions. */
   enum DimensionsOrNot {
     YES,
     NO;
@@ -254,7 +254,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     }
   }
 
-  /** Whether or not the declaration is Varargs. */
+  /** Whether the declaration is Varargs. */
   enum VarArgsOrNot {
     YES,
     NO;
