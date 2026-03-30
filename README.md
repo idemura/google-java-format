@@ -27,7 +27,7 @@ offsets (`--offset`), passing through to standard-out (default) or altered
 in-place (`--replace`).
 
 Option `--help` will print full usage details; including built-in documentation
-about other flags, such as `--aosp`, `--fix-imports-only`,
+about other flags, such as `--aosp`, `--ttech`, `--fix-imports-only`,
 `--skip-sorting-imports`, `--skip-removing-unused-import`,
 `--skip-reflowing-long-strings`, `--skip-javadoc-formatting`, or the `--dry-run`
 and `--set-exit-if-changed`.

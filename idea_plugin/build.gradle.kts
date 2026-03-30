@@ -24,13 +24,14 @@ plugins {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
 
   intellijPlatform { defaultRepositories() }
 }
 
 // https://github.com/google/google-java-format/releases
-val googleJavaFormatVersion = "1.35.0"
+val googleJavaFormatVersion = "1.0-TTECH_SNAPSHOT"
 val pluginPatchVersion = "0"
 
 java {
@@ -46,14 +47,13 @@ intellijPlatform {
     name = "google-java-format"
     version = "${googleJavaFormatVersion}.${pluginPatchVersion}"
     ideaVersion {
-      sinceBuild = "251"
+      sinceBuild = "242"
       untilBuild = provider { null }
     }
   }
 
   publishing {
-    val jetbrainsPluginRepoToken: String by project
-    token.set(jetbrainsPluginRepoToken)
+    token.set(providers.gradleProperty("jetbrainsPluginRepoToken"))
   }
 }
 
@@ -79,7 +79,7 @@ tasks { withType<Test>().configureEach { jvmArgs(gjfRequiredJvmArgs) } }
 
 dependencies {
   intellijPlatform {
-    intellijIdeaCommunity("2025.1")
+    intellijIdeaCommunity("2024.2")
     bundledPlugin("com.intellij.java")
     testFramework(TestFrameworkType.Platform)
     testFramework(TestFrameworkType.Plugin.Java)

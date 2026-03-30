@@ -145,6 +145,12 @@ public class ImportOrderer {
           .thenComparing(Import::imported);
 
   /**
+   * TTech import order comparator.
+   */
+  private static final Comparator<Import> TTECH_IMPORT_COMPARATOR =
+      Comparator.comparing(Import::importType).thenComparing(Import::imported);
+
+  /**
    * Determines whether to insert a blank line between the {@code prev} and {@code curr} {@link
    * Import}s based on Google style.
    */
@@ -167,6 +173,15 @@ public class ImportOrderer {
     return !prev.topLevel().equals(curr.topLevel());
   }
 
+  /**
+   * Determines whether to insert a blank line between the previous and current imports based
+   * on TTech style.
+   */
+  private static boolean shouldInsertBlankLineTTech(Import prev, Import curr) {
+    // #IMPORTS: Should be in sync with the AST visitor.
+    return !prev.importType().equals(curr.importType());
+  }
+
   private final String text;
   private final ImmutableList<Tok> toks;
   private final String lineSeparator;
@@ -183,6 +198,9 @@ public class ImportOrderer {
     } else if (style.equals(Style.AOSP)) {
       this.importComparator = AOSP_IMPORT_COMPARATOR;
       this.shouldInsertBlankLineFn = ImportOrderer::shouldInsertBlankLineAosp;
+    } else if (style.equals(Style.TTECH)) {
+      this.importComparator = TTECH_IMPORT_COMPARATOR;
+      this.shouldInsertBlankLineFn = ImportOrderer::shouldInsertBlankLineTTech;
     } else {
       throw new IllegalArgumentException("Unsupported code style: " + style);
     }
