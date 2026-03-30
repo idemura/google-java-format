@@ -20,8 +20,6 @@ import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.googlejavaformat.Doc.FillMode.INDEPENDENT;
 import static com.google.googlejavaformat.Doc.FillMode.UNIFIED;
 import static com.google.googlejavaformat.Indent.If.make;
-import static com.google.googlejavaformat.OpsBuilder.BlankLineWanted.PRESERVE;
-import static com.google.googlejavaformat.OpsBuilder.BlankLineWanted.YES;
 import static com.google.googlejavaformat.java.Trees.getEndPosition;
 import static com.google.googlejavaformat.java.Trees.getLength;
 import static com.google.googlejavaformat.java.Trees.getMethodName;
@@ -47,7 +45,6 @@ import static com.sun.tools.javac.code.Flags.RECORD;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-
 import com.google.auto.value.AutoOneOf;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Predicate;
@@ -159,6 +156,7 @@ import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.JCTree.JCMethodDecl;
 import com.sun.tools.javac.tree.TreeInfo;
 import com.sun.tools.javac.tree.TreeScanner;
+import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -174,7 +172,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.lang.model.element.Name;
-import org.jspecify.annotations.Nullable;
 
 /**
  * An AST visitor that builds a stream of {@link Op}s to format from the given {@link
@@ -367,7 +364,7 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       }
       for (ImportTree importDeclaration : node.getImports()) {
         markForPartialFormat();
-        builder.blankLineWanted(PRESERVE);
+        builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
         scan(importDeclaration, null);
         builder.forcedBreak();
       }
@@ -394,7 +391,7 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     ModuleTree module = node.getModule();
     if (module != null) {
       if (afterFirstToken) {
-        builder.blankLineWanted(YES);
+        builder.blankLineWanted(BlankLineWanted.YES);
       }
       markForPartialFormat();
       visitModule(module, null);
@@ -894,7 +891,7 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         if (afterFirstToken) {
           token(",");
           builder.forcedBreak();
-          builder.blankLineWanted(BlankLineWanted.PRESERVE);
+          builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
         }
         markForPartialFormat();
         visitEnumConstantDeclaration(enumConstant);
@@ -1634,7 +1631,7 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     } else {
       builder.open(plusTwo);
       builder.forcedBreak();
-      builder.blankLineWanted(BlankLineWanted.PRESERVE);
+      builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
       visitStatements(node.getBody().getStatements());
       builder.close();
       builder.forcedBreak();
@@ -2028,7 +2025,7 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     boolean afterFirstToken = false;
     for (CaseTree caseTree : cases) {
       if (afterFirstToken) {
-        builder.blankLineWanted(BlankLineWanted.PRESERVE);
+        builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
       }
       scan(caseTree, null);
       afterFirstToken = true;
@@ -3878,9 +3875,9 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
         boolean thisOneGetsBlankLineBefore =
             bodyDeclaration.getKind() != VARIABLE || hasJavaDoc(bodyDeclaration);
         if (first) {
-          builder.blankLineWanted(PRESERVE);
+          builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
         } else if (!first && (thisOneGetsBlankLineBefore || lastOneGotBlankLineBefore)) {
-          builder.blankLineWanted(YES);
+          builder.blankLineWanted(BlankLineWanted.YES);
         }
         markForPartialFormat();
 
