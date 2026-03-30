@@ -47,7 +47,7 @@ intellijPlatform {
     name = "google-java-format"
     version = "${googleJavaFormatVersion}.${pluginPatchVersion}"
     ideaVersion {
-      sinceBuild = "251"
+      sinceBuild = "242"
       untilBuild = provider { null }
     }
   }
@@ -79,7 +79,7 @@ tasks { withType<Test>().configureEach { jvmArgs(gjfRequiredJvmArgs) } }
 
 dependencies {
   intellijPlatform {
-    intellijIdeaCommunity("2025.1")
+    intellijIdeaCommunity("2024.2")
     bundledPlugin("com.intellij.java")
     testFramework(TestFrameworkType.Platform)
     testFramework(TestFrameworkType.Plugin.Java)
