@@ -24,13 +24,14 @@ plugins {
 }
 
 repositories {
+  mavenLocal()
   mavenCentral()
 
   intellijPlatform { defaultRepositories() }
 }
 
 // https://github.com/google/google-java-format/releases
-val googleJavaFormatVersion = "1.35.0"
+val googleJavaFormatVersion = "TTECH_SNAPSHOT"
 val pluginPatchVersion = "0"
 
 java {
