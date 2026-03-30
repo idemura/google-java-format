@@ -52,8 +52,7 @@ intellijPlatform {
   }
 
   publishing {
-    val jetbrainsPluginRepoToken: String by project
-    token.set(jetbrainsPluginRepoToken)
+    token.set(providers.gradleProperty("jetbrainsPluginRepoToken"))
   }
 }
 
