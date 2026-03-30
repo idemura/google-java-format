@@ -47,7 +47,7 @@ intellijPlatform {
     name = "google-java-format"
     version = "${googleJavaFormatVersion}.${pluginPatchVersion}"
     ideaVersion {
-      sinceBuild = "251"
+      sinceBuild = "242"
       untilBuild = provider { null }
     }
   }
