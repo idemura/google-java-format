@@ -81,6 +81,8 @@ def main():
                       help='be more verbose, ineffective without -i')
   parser.add_argument('-a', '--aosp', action='store_true',
                       help='use AOSP style instead of Google Style (4-space indentation)')
+  parser.add_argument('-t', '--ttech', action='store_true',
+                      help='use TTech style (4-space indentation)')
   parser.add_argument('--skip-sorting-imports', action='store_true',
                       help='do not fix the import order')
   parser.add_argument('--skip-removing-unused-imports', action='store_true',
@@ -138,6 +140,8 @@ def main():
     base_command.append('-i')
   if args.aosp:
     base_command.append('--aosp')
+  if args.ttech:
+    base_command.append('--ttech')
   if args.skip_sorting_imports:
     base_command.append('--skip-sorting-imports')
   if args.skip_removing_unused_imports:
