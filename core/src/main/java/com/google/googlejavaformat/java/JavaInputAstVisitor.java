@@ -317,6 +317,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
   protected final Indent.Const minusFour;
   protected final Indent.Const plusTwo;
   protected final Indent.Const plusFour;
+  protected final boolean ttech;
 
   private final Set<Name> typeAnnotationSimpleNames = new HashSet<>();
 
@@ -346,13 +347,14 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
    *
    * @param builder the {@link OpsBuilder}
    */
-  public JavaInputAstVisitor(OpsBuilder builder, int indentMultiplier) {
+  public JavaInputAstVisitor(OpsBuilder builder, int indentMultiplier, boolean ttech) {
     this.builder = builder;
     this.indentMultiplier = indentMultiplier;
     minusTwo = Indent.Const.make(-2, indentMultiplier);
     minusFour = Indent.Const.make(-4, indentMultiplier);
     plusTwo = Indent.Const.make(+2, indentMultiplier);
     plusFour = Indent.Const.make(+4, indentMultiplier);
+    this.ttech = ttech;
   }
 
   /** A record of whether we have visited into an expression. */
@@ -787,8 +789,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     visitStatement(
         node.getStatement(),
         CollapseEmptyOrNot.YES,
-        AllowLeadingBlankLine.YES,
-        AllowTrailingBlankLine.YES);
+        AllowLeadingBlankLine.valueOf(!ttech),
+        AllowTrailingBlankLine.valueOf(!ttech));
     if (node.getStatement().getKind() == BLOCK) {
       builder.space();
     } else {
@@ -831,7 +833,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     visitStatement(
         node.getStatement(),
         CollapseEmptyOrNot.YES,
-        AllowLeadingBlankLine.YES,
+        AllowLeadingBlankLine.valueOf(!ttech),
         AllowTrailingBlankLine.NO);
     return null;
   }
@@ -1155,7 +1157,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     visitStatement(
         node.getStatement(),
         CollapseEmptyOrNot.YES,
-        AllowLeadingBlankLine.YES,
+        AllowLeadingBlankLine.valueOf(!ttech),
         AllowTrailingBlankLine.NO);
     return null;
   }
@@ -1201,8 +1203,8 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       visitStatement(
           statements.get(i),
           CollapseEmptyOrNot.valueOf(onlyClause),
-          AllowLeadingBlankLine.YES,
-          AllowTrailingBlankLine.valueOf(trailingClauses));
+          AllowLeadingBlankLine.valueOf(!ttech),
+          AllowTrailingBlankLine.valueOf(!ttech && trailingClauses));
       followingBlock = statements.get(i).getKind() == BLOCK;
       afterFirstToken = true;
     }
@@ -1216,7 +1218,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       visitStatement(
           node.getElseStatement(),
           CollapseEmptyOrNot.NO,
-          AllowLeadingBlankLine.YES,
+          AllowLeadingBlankLine.valueOf(!ttech),
           AllowTrailingBlankLine.NO);
     }
     builder.close();
@@ -2157,12 +2159,12 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     visitBlock(
         node.getBlock(),
         CollapseEmptyOrNot.valueOf(!trailingClauses),
-        AllowLeadingBlankLine.YES,
-        AllowTrailingBlankLine.valueOf(trailingClauses));
+        AllowLeadingBlankLine.valueOf(!ttech),
+        AllowTrailingBlankLine.valueOf(!ttech && trailingClauses));
     for (int i = 0; i < node.getCatches().size(); i++) {
       CatchTree catchClause = node.getCatches().get(i);
       trailingClauses = i < node.getCatches().size() - 1 || node.getFinallyBlock() != null;
-      visitCatchClause(catchClause, AllowTrailingBlankLine.valueOf(trailingClauses));
+      visitCatchClause(catchClause, AllowTrailingBlankLine.valueOf(!ttech && trailingClauses));
     }
     if (node.getFinallyBlock() != null) {
       builder.space();
@@ -2171,7 +2173,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       visitBlock(
           node.getFinallyBlock(),
           CollapseEmptyOrNot.NO,
-          AllowLeadingBlankLine.YES,
+          AllowLeadingBlankLine.valueOf(!ttech),
           AllowTrailingBlankLine.NO);
     }
     builder.close();
@@ -2263,7 +2265,7 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     visitStatement(
         node.getStatement(),
         CollapseEmptyOrNot.YES,
-        AllowLeadingBlankLine.YES,
+        AllowLeadingBlankLine.valueOf(!ttech),
         AllowTrailingBlankLine.NO);
     return null;
   }
@@ -2699,7 +2701,10 @@ public class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
     token(")");
     builder.space();
     visitBlock(
-        node.getBlock(), CollapseEmptyOrNot.NO, AllowLeadingBlankLine.YES, allowTrailingBlankLine);
+        node.getBlock(),
+        CollapseEmptyOrNot.NO,
+        AllowLeadingBlankLine.valueOf(!ttech),
+        allowTrailingBlankLine);
   }
 
   /** Formats a union type declaration in a catch clause. */

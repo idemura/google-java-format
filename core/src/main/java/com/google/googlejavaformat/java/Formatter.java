@@ -29,6 +29,7 @@ import com.google.googlejavaformat.FormattingError;
 import com.google.googlejavaformat.Newlines;
 import com.google.googlejavaformat.Op;
 import com.google.googlejavaformat.OpsBuilder;
+import com.google.googlejavaformat.java.JavaFormatterOptions.Style;
 import com.sun.tools.javac.tree.JCTree.JCCompilationUnit;
 import com.sun.tools.javac.util.Context;
 import java.io.IOException;
@@ -110,7 +111,9 @@ public final class Formatter {
     }
     OpsBuilder builder = new OpsBuilder(javaInput, javaOutput);
     // Output the compilation unit.
-    JavaInputAstVisitor visitor = new JavaInputAstVisitor(builder, options.indentationMultiplier());
+    JavaInputAstVisitor visitor =
+        new JavaInputAstVisitor(
+            builder, options.indentationMultiplier(), options.style() == Style.TTECH);
     visitor.scan(unit, null);
     builder.sync(javaInput.getText().length());
     builder.drain();
