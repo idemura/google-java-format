@@ -23,7 +23,7 @@ import com.google.errorprone.annotations.Immutable;
  * Options for a google-java-format invocation.
  *
  * <p>Like gofmt, the google-java-format CLI exposes <em>no</em> configuration options (aside from
- * {@code --aosp}).
+ * {@code --aosp} or {@code --ttech}).
  *
  * <p>The goal of google-java-format is to provide consistent formatting, and to free developers
  * from arguments over style choices. It is an explicit non-goal to support developers' individual
@@ -42,7 +42,10 @@ public record JavaFormatterOptions(boolean formatJavadoc, boolean reorderModifie
     GOOGLE(1),
 
     /** The AOSP-compliant configuration. */
-    AOSP(2);
+    AOSP(2),
+
+    /** The TTech configuration. */
+    TTECH(2);
 
     private final int indentationMultiplier;
 

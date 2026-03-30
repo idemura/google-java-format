@@ -116,9 +116,17 @@ public final class Main {
       throw new UsageException();
     }
 
+    Style style;
+    if (parameters.ttech()) {
+      style = Style.TTECH;
+    } else if (parameters.aosp()) {
+      style = Style.AOSP;
+    } else {
+      style = Style.GOOGLE;
+    }
     JavaFormatterOptions options =
         JavaFormatterOptions.builder()
-            .style(parameters.aosp() ? Style.AOSP : Style.GOOGLE)
+            .style(style)
             .formatJavadoc(parameters.formatJavadoc())
             .build();
 

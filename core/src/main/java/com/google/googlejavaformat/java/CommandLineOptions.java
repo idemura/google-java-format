@@ -29,6 +29,7 @@ import java.util.Optional;
  * @param offsets Character offsets for partial formatting, paired with {@code lengths}.
  * @param lengths Partial formatting region lengths, paired with {@code offsets}.
  * @param aosp Use AOSP style instead of Google Style (4-space indentation).
+ * @param ttech Use TTech style (4-space indentation).
  * @param version Print the version.
  * @param help Print usage information.
  * @param stdin Format input from stdin.
@@ -47,6 +48,7 @@ record CommandLineOptions(
     ImmutableList<Integer> offsets,
     ImmutableList<Integer> lengths,
     boolean aosp,
+    boolean ttech,
     boolean version,
     boolean help,
     boolean stdin,
@@ -71,6 +73,7 @@ record CommandLineOptions(
         .reflowLongStrings(true)
         .formatJavadoc(true)
         .aosp(false)
+        .ttech(false)
         .version(false)
         .help(false)
         .stdin(false)
@@ -106,6 +109,8 @@ record CommandLineOptions(
     }
 
     Builder aosp(boolean aosp);
+
+    Builder ttech(boolean aosp);
 
     Builder version(boolean version);
 
