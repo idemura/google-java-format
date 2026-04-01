@@ -31,7 +31,7 @@ repositories {
 }
 
 // https://github.com/google/google-java-format/releases
-val googleJavaFormatVersion = "TTECH_SNAPSHOT"
+val googleJavaFormatVersion = "1.0-TTECH_SNAPSHOT"
 val pluginPatchVersion = "0"
 
 java {
