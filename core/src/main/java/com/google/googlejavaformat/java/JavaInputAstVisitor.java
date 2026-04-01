@@ -364,7 +364,8 @@ class JavaInputAstVisitor extends TreePathScanner<Void, Void> {
       }
       for (ImportTree importDeclaration : node.getImports()) {
         markForPartialFormat();
-        builder.blankLineWanted(ttech ? BlankLineWanted.NO : BlankLineWanted.PRESERVE);
+        // #IMPORTS: Should be in sync with the import optimizer.
+        builder.blankLineWanted(BlankLineWanted.PRESERVE);
         scan(importDeclaration, null);
         builder.forcedBreak();
       }

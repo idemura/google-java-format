@@ -178,6 +178,7 @@ public class ImportOrderer {
    * on TTech style.
    */
   private static boolean shouldInsertBlankLineTTech(Import prev, Import curr) {
+    // #IMPORTS: Should be in sync with the AST visitor.
     return !prev.importType().equals(curr.importType());
   }
 
